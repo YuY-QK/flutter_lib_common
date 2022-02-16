@@ -1,0 +1,35 @@
+name: flutter_lib_common
+description: A base lib with flutter project
+version: 0.0.1
+homepage: https://github.com/YuY-QK/FlutterLibCommon
+publish_to: git@github.com:YuY-QK/flutter_lib_common.git
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Internet check connect
+  # https://pub.flutter-io.cn/packages/connectivity
+  connectivity: ^3.0.6
+
+  #https://pub.dev/packages/dio
+  dio: ^4.0.0
+
+  # print with format
+  # https://pub.flutter-io.cn/packages/logger
+  logger: ^1.1.0
+
+  #https://pub.flutter-io.cn/packages/flutter_screenutil
+  flutter_screenutil: ^5.0.0+2
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^1.0.0
+
+flutter:
