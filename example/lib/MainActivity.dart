@@ -15,6 +15,12 @@ class MainActivity extends BasePageStatefulWidget {
 class _MainFlutterState extends BasePageState<MainActivity> {
 
   @override
+  void buildConfig(BuildContext context) {
+    // TODO: implement buildConfig
+    super.buildConfig(context);
+  }
+
+  @override
   Widget buildContentBody(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(20),

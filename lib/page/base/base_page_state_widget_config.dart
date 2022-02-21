@@ -13,6 +13,7 @@ abstract class BasePageStateWidgetConfig implements PageInterface {
 
   /// 构建base组件
   Widget buildBase(BuildContext context) {
+    buildConfig(context);
     return TextScaleNormalLayout(child: buildPage(context));
   }
 
@@ -128,6 +129,9 @@ abstract class BasePageStateWidgetConfig implements PageInterface {
   bool showLeftIcon() {
     return true;
   }
+
+  /// 构建配置，可空实现
+  void buildConfig(BuildContext context) {}
 
 }
 
