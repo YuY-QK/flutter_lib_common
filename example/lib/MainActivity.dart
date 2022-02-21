@@ -3,8 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lib_common/page/base/base_page_state_widget.dart';
-
-import 'list/list_page.dart';
+import 'package:flutter_lib_common/widgets/empty_layout.dart';
 
 class MainActivity extends BasePageStatefulWidget {
 
@@ -29,6 +28,20 @@ class _MainFlutterState extends BasePageState<MainActivity> {
         color: Colors.white,
         child: Column(
           children: [
+            Text("各种Widget组件展示",
+              style: TextStyle(fontSize: 20, color: Colors.black),
+            ),
+
+            EmptyLayout(
+              type: EmptyType.DATA_EMPTY,
+              layoutArrange: EmptyArrange.ICON_TEXT,
+              iconWidth: 100,
+              iconBuilder: (context, tipType) =>
+                tipType == EmptyType.DATA_EMPTY?
+                  "assets/images/icon_empty.png":
+                  "assets/images/gifindicator1.gif",
+              customWidget: Padding(padding: EdgeInsets.all(8)),
+            )
 
           ],
         ),
