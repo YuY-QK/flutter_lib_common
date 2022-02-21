@@ -16,16 +16,18 @@ dependencies:
   # https://pub.flutter-io.cn/packages/connectivity
   connectivity: ^3.0.6
 
-  #https://pub.dev/packages/dio
+  # https://pub.dev/packages/dio
   dio: ^4.0.0
 
   # print with format
   # https://pub.flutter-io.cn/packages/logger
   logger: ^1.1.0
 
-  #https://pub.flutter-io.cn/packages/flutter_screenutil
-  flutter_screenutil: ^5.0.0+2
+  # https://pub.dev/packages/pull_to_refresh
+  pull_to_refresh: ^2.0.0
 
+  #https://pub.dev/packages/provider
+  provider: 6.0.1
 
 dev_dependencies:
   flutter_test:

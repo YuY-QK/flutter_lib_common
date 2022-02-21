@@ -86,12 +86,6 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "flutter_screenutil",
-      "rootUri": "file:///Users/yu/Config/Flutter/SDK/.pub-cache/hosted/pub.flutter-io.cn/flutter_screenutil-5.2.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "flutter_test",
       "rootUri": "file:///Users/yu/Config/Flutter/SDK/packages/flutter_test",
       "packageUri": "lib/",
@@ -140,6 +134,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "nested",
+      "rootUri": "file:///Users/yu/Config/Flutter/SDK/.pub-cache/hosted/pub.flutter-io.cn/nested-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "path",
       "rootUri": "file:///Users/yu/Config/Flutter/SDK/.pub-cache/hosted/pub.flutter-io.cn/path-1.8.0",
       "packageUri": "lib/",
@@ -148,6 +148,18 @@
     {
       "name": "plugin_platform_interface",
       "rootUri": "file:///Users/yu/Config/Flutter/SDK/.pub-cache/hosted/pub.flutter-io.cn/plugin_platform_interface-2.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "provider",
+      "rootUri": "file:///Users/yu/Config/Flutter/SDK/.pub-cache/hosted/pub.flutter-io.cn/provider-6.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "pull_to_refresh",
+      "rootUri": "file:///Users/yu/Config/Flutter/SDK/.pub-cache/hosted/pub.flutter-io.cn/pull_to_refresh-2.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -212,7 +224,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2022-02-16T09:54:27.069606Z",
+  "generated": "2022-02-21T02:54:23.749196Z",
   "generator": "pub",
   "generatorVersion": "2.14.4"
 }

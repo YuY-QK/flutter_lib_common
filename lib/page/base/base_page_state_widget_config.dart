@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_lib_common/utils/screen_utils.dart';
 import 'package:flutter_lib_common/widgets/text_scale_normal_layout.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Signature of callbacks that have no arguments and return no data.
 typedef VoidCallback = void Function();
@@ -11,9 +9,10 @@ typedef VoidCallback = void Function();
 
 abstract class BasePageStateWidgetConfig implements PageInterface {
 
+  final double PADDING_LEFTICON = 5;
+
   /// 构建base组件
   Widget buildBase(BuildContext context) {
-    ScreenUtils.buildScreen(context);
     return TextScaleNormalLayout(child: buildPage(context));
   }
 
@@ -24,9 +23,9 @@ abstract class BasePageStateWidgetConfig implements PageInterface {
   Widget buildPage(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false, //不跟随软键盘上移
-        appBar: customAppBar() ?? _baseAppBar(),
+        appBar: _customAppBar() ?? _baseAppBar(),
         backgroundColor: getBackgroundColor(),
-        body: Container(child: buildContentBody())
+        body: Container(child: buildContentBody(context))
     );
   }
 
@@ -46,16 +45,13 @@ abstract class BasePageStateWidgetConfig implements PageInterface {
       backgroundColor: getAppBarBgColor(),
       centerTitle: true,
       elevation: 0,
-      titleTextStyle: TextStyle(
-        fontWeight: FontWeight.w500,
-        fontSize: 18.sp,
-      ),
+      titleTextStyle: getTitleTextStyle(),
     );
   }
 
   ///
   /// 自定义APPBar
-  AppBar? customAppBar() {
+  AppBar? _customAppBar() {
     if (customAppBarTitle() == null) {
       return null;
     }
@@ -88,11 +84,14 @@ abstract class BasePageStateWidgetConfig implements PageInterface {
 
   /// 标题栏左侧图标
   Widget getLeftIcon() {
+    if (!showLeftIcon()) {
+      return Container();
+    }
     return Padding(
-      padding: EdgeInsets.all(5.r),
+      padding: EdgeInsets.all(getLeftIconPadding()),
       child: IconButton(
           onPressed: leftIconPressed,
-          icon: Icon(Icons.arrow_back_ios_new_outlined)),
+          icon: const Icon(Icons.arrow_back_ios_new_outlined)),
     );
   }
 
@@ -106,27 +105,29 @@ abstract class BasePageStateWidgetConfig implements PageInterface {
     return Colors.white;
   }
 
+
   /// 标题栏图标主题
   IconThemeData getIconTheme() {
-    return IconThemeData(color: Colors.black);
+    return const IconThemeData(color: Colors.black);
   }
 
   /// 标题栏标题文字样式
-  TextStyle getTitleTextStyle();
-
-  /// 空布局
-  Widget getEmptyLayout();
-
-
-  String getEmptyTip() {
-    return "";
-  }
+  TextStyle? getTitleTextStyle();
 
   /// 背景色
   Color getBackgroundColor();
 
   /// 左侧按钮点击
   VoidCallback? leftIconPressed();
+
+  double getLeftIconPadding() {
+    return PADDING_LEFTICON;
+  }
+
+  /// 是否显示左侧按钮
+  bool showLeftIcon() {
+    return true;
+  }
 
 }
 
@@ -142,7 +143,7 @@ abstract class PageInterface {
   String getAppBarTitleText();
 
   /// 构建内容区域
-  Widget buildContentBody();
+  Widget buildContentBody(BuildContext context);
 
   /// 获取页面内容
   String getPageName();

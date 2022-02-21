@@ -76,35 +76,33 @@ Future<void> login(String phone) async {
 
 #### 页面基类
 ```
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lib_common/page/base/base_page_state_widget.dart';
-import 'package:flutter_lib_common/page/base/base_page_state_widget_config.dart';
 
-class TestFlutter extends BasePageStatefulWidget {
+class MainActivity extends BasePageStatefulWidget {
 
   @override
-  State<StatefulWidget> createState() => _TestFlutterState();
+  State<StatefulWidget> createState() => _MainFlutterState();
 }
 
-class _TestFlutterState extends BasePageState<TestFlutter> {
+class _MainFlutterState extends BasePageState<MainActivity> {
 
   @override
   Widget buildContentBody() {
-    return Container(color: Colors.white);
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: Container(color: Colors.white),
+    );
   }
 
   @override
-  String getAppBarTitleText() => '标题';
-
-  /// build 方法中必须实现buildBase
-  @override
-  Widget build(BuildContext context) {
-    return buildBase(context);
-  }
+  String getAppBarTitleText() => '主页面';
 
   @override
   Color getBackgroundColor() {
-    return Colors.white;
+    return Colors.yellow;
   }
 
   @override
@@ -121,7 +119,18 @@ class _TestFlutterState extends BasePageState<TestFlutter> {
   VoidCallback? leftIconPressed() {
 
   }
+
+  @override
+  bool showLeftIcon() {
+    return false;
+  }
+
+  @override
+  double? getTitleTextFontSize() {
+    return 18;
+  }
 }
+
 
 ```
 

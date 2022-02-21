@@ -24,6 +24,11 @@ abstract class BasePageStatelessWidget extends StatelessWidget
     return runtimeType.toString();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return buildBase(context);
+  }
+
 }
 
 
@@ -92,4 +97,8 @@ abstract class BasePageState<T extends BasePageStatefulWidget> extends State<T>
     Log.v('didChangeAppLifecycleState: $state');
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return buildBase(context);
+  }
 }
