@@ -30,4 +30,10 @@ class ScreenUtils {
   static double getScreenPixelRatio(BuildContext context) {
     return MediaQuery.of(context).devicePixelRatio;
   }
+
+  ///
+  /// 获取appbar的标题栏高度，包含状态栏
+  static double getAppbarTitleHeight(BuildContext context, {bool containStatus = true}) {
+    return kToolbarHeight + (containStatus ? MediaQuery.of(context).padding.top : 0);
+  }
 }
