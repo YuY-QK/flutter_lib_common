@@ -1,6 +1,8 @@
 
 import 'package:dio/dio.dart';
 
+import 'http_config.dart';
+
 /// 自定义异常
 class HttpDioException implements Exception {
 
@@ -17,25 +19,37 @@ class HttpDioException implements Exception {
     return "$code => $message";
   }
 
-  factory HttpDioException.create(DioError error) {
+  factory HttpDioException.create(DioError error, {HttpExceptionHandler? handler}) {
+    HttpDioException exception;
     switch (error.type) {
       case DioErrorType.cancel:
-        return BadRequestException(HttpErrorType.REQUEST_CANCEL, "请求取消");
+        exception = BadRequestException(HttpErrorType.REQUEST_CANCEL, HttpDescriptionConfig.REQUEST_CANCEL);
+        break;
 
       case DioErrorType.connectTimeout:
-        return BadRequestException(HttpErrorType.TIMEOUT_CONNECT, "连接超时");
+        exception = BadRequestException(HttpErrorType.TIMEOUT_CONNECT, HttpDescriptionConfig.TIMEOUT_CONNECT);
+        break;
 
       case DioErrorType.sendTimeout:
-        return BadRequestException(HttpErrorType.TIMEOUT_REQUEST, "请求超时");
+        exception = BadRequestException(HttpErrorType.TIMEOUT_REQUEST, HttpDescriptionConfig.TIMEOUT_REQUEST);
+        break;
 
       case DioErrorType.receiveTimeout:
-        return BadRequestException(HttpErrorType.TIMEOUT_RESPONSE, "响应超时");
+        exception = BadRequestException(HttpErrorType.TIMEOUT_RESPONSE, HttpDescriptionConfig.TIMEOUT_RESPONSE);
+        break;
 
       case DioErrorType.response:
-        return _handleResponseException(error);
+        exception = _handleResponseException(error);
+        break;
 
       default:
-        return UnknownException(error: error.error);
+        exception = UnknownException(error: error.error);
+        break;
+    }
+    if (handler != null) {
+      return handler.handle(exception, exception.code, exception.message);
+    } else {
+      return exception;
     }
   }
 
@@ -44,23 +58,23 @@ class HttpDioException implements Exception {
       int errCode = error.response?.statusCode ?? HttpErrorType.UNKNOWN_ERROR;
       switch (errCode) {
         case HttpErrorType.HTTP_BAD_REQUEST:
-          return BadRequestException(errCode, "请求语法错误");
+          return BadRequestException(errCode, HttpDescriptionConfig.HTTP_BAD_REQUEST);
         case HttpErrorType.HTTP_UNAUTHORIZED:
-          return UnauthorisedException(errCode, "没有权限");
+          return UnauthorisedException(errCode, HttpDescriptionConfig.HTTP_UNAUTHORIZED);
         case HttpErrorType.HTTP_FORBIDDEN:
-          return UnauthorisedException(errCode, "服务器拒绝执行");
+          return UnauthorisedException(errCode, HttpDescriptionConfig.HTTP_FORBIDDEN);
         case HttpErrorType.HTTP_NOT_FOUND:
-          return UnauthorisedException(errCode, "无法连接服务器");
+          return UnauthorisedException(errCode, HttpDescriptionConfig.HTTP_NOT_FOUND);
         case HttpErrorType.HTTP_PROHIBIT:
-          return UnauthorisedException(errCode, "请求方法被禁止");
+          return UnauthorisedException(errCode, HttpDescriptionConfig.HTTP_PROHIBIT);
         case HttpErrorType.HTTP_SERVER_ERROR:
-          return UnauthorisedException(errCode, "服务器内部错误");
+          return UnauthorisedException(errCode, HttpDescriptionConfig.HTTP_SERVER_ERROR);
         case HttpErrorType.HTTP_REQUEST_ERROR:
-          return UnauthorisedException(errCode, "无效的请求");
+          return UnauthorisedException(errCode, HttpDescriptionConfig.HTTP_REQUEST_ERROR);
         case HttpErrorType.HTTP_SERVER_DOWN:
-          return UnauthorisedException(errCode, "服务器挂了");
+          return UnauthorisedException(errCode, HttpDescriptionConfig.HTTP_SERVER_DOWN);
         case HttpErrorType.HTTP_PROTOCOL_ERROR:
-          return UnauthorisedException(errCode, "不支持HTTP协议请求");
+          return UnauthorisedException(errCode, HttpDescriptionConfig.HTTP_PROTOCOL_ERROR);
         case HttpErrorType.UNKNOWN_ERROR:
           return UnknownException();
         default:
@@ -122,7 +136,15 @@ class UnauthorisedException extends HttpDioException {
 class UnknownException extends HttpDioException {
   UnknownException({dynamic error}) : super(
       code: HttpErrorType.UNKNOWN_ERROR,
-      message: "未知错误") {
+      message: HttpDescriptionConfig.UNKNOWN_ERROR) {
     this.error = error;
   }
+}
+
+abstract class HttpExceptionHandler {
+
+  ///
+  /// 处理异常
+  HttpDioException handle(HttpDioException exception, int code, String message);
+
 }

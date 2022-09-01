@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import 'http_client.dart';
 import 'http_config.dart';
+import 'http_exception.dart';
 import 'http_interceptors.dart';
 
 /// 网络请求管理类
@@ -10,7 +11,7 @@ class HttpManager {
   /// 内部构造方法，可避免外部暴露构造函数，进行实例化
   HttpManager._internal();
 
-  static HttpManager _instance = HttpManager._internal();
+  static final HttpManager _instance = HttpManager._internal();
 
   /// 工厂构造方法，这里使用命名构造函数方式进行声明
   factory HttpManager.getInstance() => _instance;
@@ -31,7 +32,8 @@ class HttpManager {
     int? connectTimeout,
     int? receiveTimeout,
     Function? defaultLoading,
-    List<Interceptor>? interceptors
+    List<Interceptor>? interceptors,
+    HttpExceptionHandler? handler
   }) {
     if (interceptors != null) {
       interceptors.addAll([
@@ -48,7 +50,8 @@ class HttpManager {
         connectTimeout: connectTimeout,
         receiveTimeout: receiveTimeout,
         defaultLoading: defaultLoading,
-        interceptors: interceptors
+        interceptors: interceptors,
+        handler: handler
     );
 
   }

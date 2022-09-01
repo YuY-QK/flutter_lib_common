@@ -7,10 +7,14 @@ import 'http_exception.dart';
 /// 错误处理拦截器
 class ErrorInterceptor extends Interceptor {
 
+  HttpExceptionHandler? handler;
+
+  ErrorInterceptor({this.handler});
+
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
     // error统一处理
-    HttpDioException appException = HttpDioException.create(err);
+    HttpDioException appException = HttpDioException.create(err, handler: this.handler);
     // 错误提示
     debugPrint('DioError===: ${appException.toString()}');
     err.error = appException;

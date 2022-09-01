@@ -19,19 +19,31 @@ dependencies:
   # https://pub.dev/packages/dio
   dio: ^4.0.0
 
+  # https://pub.dev/packages/retrofit
+  retrofit: '>=3.0.0 <4.0.0'
+
   # print with format
   # https://pub.flutter-io.cn/packages/logger
   logger: ^1.1.0
 
+  # https://pub.dev/packages/json_serializable
+  json_serializable: ^6.3.1
+
   # https://pub.dev/packages/pull_to_refresh
   pull_to_refresh: ^2.0.0
 
-  #https://pub.dev/packages/provider
+  # https://pub.dev/packages/provider
   provider: 6.0.1
+
+  # https://pub.dev/packages/riverpod
+  riverpod: ^1.0.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
+
+  retrofit_generator: '>=4.0.0 <5.0.0'
+  build_runner: ^2.2.0
 
 flutter:

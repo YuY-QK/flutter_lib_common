@@ -17,24 +17,24 @@ import 'http_interceptors.dart';
 /// 网络请求dio封装
 class DioHttp {
 
-  static DioHttp _instance = DioHttp._internal();
-
-  factory DioHttp.getInstance() => _instance;
+  factory DioHttp.getInstance() => DioHttp._internal();
 
   static Function? commonLoading;
 
-  static Dio? _mDio;
-  CancelToken _cancelToken = new CancelToken();
+  static late Dio _mDio;
+  final CancelToken _cancelToken = CancelToken();
   var defaultHost = Host.getHost();
 
+  /// 私有构造
+  DioHttp._();
+
   DioHttp._internal() {
-    if (_mDio == null) {
-      _mDio = new Dio(_config());
-      // 添加error拦截器
-      _mDio?.interceptors
-          .add(ErrorInterceptor());
-      _configProxy();
-    }
+    _mDio = Dio(_config());
+    _configProxy();
+  }
+
+  Dio getDio() {
+    return _mDio;
   }
 
   BaseOptions _config() {
@@ -63,7 +63,8 @@ class DioHttp {
     int? connectTimeout,
     int? receiveTimeout,
     Function? defaultLoading,
-    List<Interceptor>? interceptors
+    List<Interceptor>? interceptors,
+    HttpExceptionHandler? handler
   }) {
     HttpResponseConfig.LABEL_CODE = codeLabel ?? HttpResponseConfig.LABEL_CODE;
     HttpResponseConfig.LABEL_MESSAGE = messageLabel ?? HttpResponseConfig.LABEL_MESSAGE;
@@ -71,22 +72,25 @@ class DioHttp {
     HttpResponseConfig.SERVER_SUCCESS = serverSuccessCode ?? HttpResponseConfig.SERVER_SUCCESS;
     commonLoading = defaultLoading;
 
-    _mDio?.options = _mDio!.options.copyWith(
+    _mDio.options = _mDio.options.copyWith(
       baseUrl: baseUrl ?? defaultHost,
       connectTimeout: connectTimeout,
       receiveTimeout: receiveTimeout,
     );
     if (interceptors != null && interceptors.isNotEmpty) {
-      _mDio?.interceptors?..addAll(interceptors);
+      _mDio.interceptors.addAll(interceptors);
     }
-    _mDio?.interceptors.add(LoggerInterceptor());
+    _mDio.interceptors
+      ..add(ErrorInterceptor(handler: handler)) // 添加error拦截器
+      ..add(LoggerInterceptor())  // 添加日志拦截器
+    ;
   }
 
   /// 配置代理
   void _configProxy() {
     // 在调试模式下需要抓包调试，所以我们使用代理，并禁用HTTPS证书校验
     if (HttpProxyConfig.PROXY_ENABLE) {
-      (_mDio?.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (client) {
+      (_mDio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (client) {
         client.findProxy = (uri) {
           return "PROXY ${HttpProxyConfig.PROXY_IP}:${HttpProxyConfig.PROXY_PORT}";
         };
@@ -104,7 +108,7 @@ class DioHttp {
    * 所以参数可选
    */
   void cancelRequests({CancelToken? token}) {
-    token ?? _cancelToken.cancel("cancelled");
+    token ?? _cancelToken.cancel(HttpDescriptionConfig.REQUEST_CANCEL_REASON);
   }
 
   /// 服务请求
@@ -131,7 +135,7 @@ class DioHttp {
       var connectivityResult = await (Connectivity().checkConnectivity());
       //没有网络
       if (connectivityResult == ConnectivityResult.none) {
-        String errMsg = "网络异常，请检查你的网络！";
+        String errMsg = HttpDescriptionConfig.NET_ERROR;
         if (onComplete != null) {
           onComplete(
               HttpErrorType.INTERNET_ERROR,
@@ -245,24 +249,24 @@ class DioHttp {
   }
 
   void lock() {
-    _mDio?.lock();
+    _mDio.lock();
   }
 
   void unlock() {
-    _mDio?.unlock();
+    _mDio.unlock();
   }
 
   Future<Response<dynamic>> _request(
       String url, String method,
       Map<String, dynamic>? param) async {
     if (method == HttpMethodConfig.METHOD_POST) {
-      var response = await _mDio!.post(
+      var response = await _mDio.post(
           _configUrl(url),
           data: param
       );
       return response;
     } else {
-      var response = await _mDio!.get(
+      var response = await _mDio.get(
           _configUrl(url),
           queryParameters: param
       );
